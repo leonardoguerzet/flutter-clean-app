@@ -25,6 +25,11 @@ void main() {
   });
 
   test('Should call HttpClient with correct values', () async {
+    when(httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body')))
+        .thenAnswer((_) async => {'acessToken': faker.guid.guid(), 'name': faker.person.name()});
     await sut.auth(params);
 
     verify(httpClient.request(
@@ -79,6 +84,19 @@ void main() {
     final future = sut.auth(params);
 
     expect(future, throwsA(DomainError.invalidCredetials));
+  });
+
+  test('Should return an Account if HttpClient returns 200', () async {
+    final acessToken = faker.guid.guid();
+    when(httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body')))
+        .thenAnswer((_) async => {'acessToken': acessToken, 'name': faker.person.name()});
+
+    final account = await sut.auth(params);
+
+    expect(account.token, acessToken);
   });
 
 }

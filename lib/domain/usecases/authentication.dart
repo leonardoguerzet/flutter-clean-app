@@ -14,5 +14,4 @@ class AuthenticationParams {
     @required this.email,
     @required this.secret,
   });
-
 }
