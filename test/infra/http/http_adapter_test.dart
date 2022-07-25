@@ -1,36 +1,11 @@
-import 'dart:convert';
+
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
-import 'package:meta/meta.dart';
 
-import 'package:flutter_clean_app/data/http/http.dart';
 
-class HttpAdapter implements HttpClient {
-  final Client client;
-
-  HttpAdapter(this.client);
-
-  Future<Map> request({
-    @required String url,
-    @required String method,
-    Map body,
-  }) async {
-    final headers = {
-      'content-type': 'application/json',
-      'accept': 'application/json',
-    };
-    final jsonBody = body != null ? jsonEncode(body) : null;
-    final response = await client.post(url, headers: headers, body: jsonBody);
-    if (response.body == 200) {
-      return response.body.isEmpty ? null : jsonDecode(response.body);
-    }
-    else {
-      return null;
-    }
-  }
-}
+import 'package:flutter_clean_app/infra/http/http.dart';
 
 class ClientSpy extends Mock implements Client {}
 
@@ -80,10 +55,7 @@ void main() {
     });
 
     test('Should return data if post returns 200', () async {
-      final response = await sut.request(
-        url: url,
-        method: 'post',
-      );
+      final response = await sut.request(url: url, method: 'post',);
 
       expect(response, {'any_key': 'any_value'});
     });
