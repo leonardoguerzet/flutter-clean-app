@@ -4,10 +4,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_clean_app/ui/pages/login_page.dart';
 
 void main() {
-  testWidgets('Should load with correct initial state',
-      (WidgetTester tester) async {
+  Future<void> loadPage(WidgetTester tester) async {
     final loginPage = MaterialApp(home: LoginPage());
     await tester.pumpWidget(loginPage);
+  }
+
+  testWidgets('Should load with correct initial state',
+      (WidgetTester tester) async {
+    await loadPage(tester);
 
     final emailTextChildren = find.descendant(
         of: find.bySemanticsLabel('Email'), matching: find.byType(Text));
@@ -19,10 +23,15 @@ void main() {
         of: find.bySemanticsLabel('Senha'), matching: find.byType(Text));
     expect(passwordTextChildren, findsOneWidget,
         reason:
-        'when a TextFormField has only one child, means it has no errors, since one of the children is always the hint label text');
+            'when a TextFormField has only one child, means it has no errors, since one of the children is always the hint label text');
 
     final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
     expect(button.onPressed, null);
+  });
 
+  testWidgets('Should call validate with correct values',
+      (WidgetTester tester) async {
+    final loginPage = MaterialApp(home: LoginPage());
+    await tester.pumpWidget(loginPage);
   });
 }
