@@ -3,10 +3,11 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:meta/meta.dart';
 
-
-
 abstract class Validation {
-  String validate({@required String field, @required String value,});
+  String validate({
+    @required String field,
+    @required String value,
+  });
 }
 
 class StreamLoginPresenter {
@@ -19,17 +20,25 @@ class StreamLoginPresenter {
   }
 }
 
-class ValidationSpy extends Mock implements Validation{}
+class ValidationSpy extends Mock implements Validation {}
 
-void main(){
-  test('Should call validation with correct email', (){
-    final validation = ValidationSpy();
-    final sut = StreamLoginPresenter(validation: validation);
-    final email = faker.internet.email();
+void main() {
+
+  StreamLoginPresenter sut;
+  ValidationSpy validation;
+  String email;
+
+  setUp(() {
+
+    validation = ValidationSpy();
+    sut = StreamLoginPresenter(validation: validation);
+    email = faker.internet.email();
+  });
+
+  test('Should call validation with correct email', () {
 
     sut.validateEmail(email);
 
     verify(validation.validate(field: 'email', value: email)).called(1);
   });
-
 }
