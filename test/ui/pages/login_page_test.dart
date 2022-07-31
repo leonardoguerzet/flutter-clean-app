@@ -107,6 +107,7 @@ void main() {
         findsOneWidget
     );
   });
+  
 
   testWidgets('Should present no error if email is valid', (WidgetTester tester) async {
     await loadPage(tester);
