@@ -1,5 +1,5 @@
-import 'package:meta/meta.dart';
 import 'dart:async';
+import 'package:meta/meta.dart';
 
 import '../protocols/protocols.dart';
 
