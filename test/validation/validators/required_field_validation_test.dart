@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
-
 abstract class FieldValidation {
   String get field;
+
   String validate(String value);
 }
 
@@ -14,25 +14,20 @@ class RequiredFieldValidation implements FieldValidation {
   String validate(String value) {
     return value.isEmpty ? 'Campo obrigatório' : null;
   }
-
 }
 
-void main (){
+void main() {
+  RequiredFieldValidation sut;
 
-  test('Should return null if value is not empty', (){
-    final sut = RequiredFieldValidation('any_field');
-
-    final error = sut.validate('any_value');
-
-    expect(error, null);
+  setUp(() {
+    sut = RequiredFieldValidation('any_field');
   });
 
+  test('Should return null if value is not empty', () {
+    expect(sut.validate('any_value'), null);
+  });
 
-  test('Should return error if value is empty', (){
-    final sut = RequiredFieldValidation('any_field');
-
-    final error = sut.validate('');
-
-    expect(error, 'Campo obrigatório');
+  test('Should return error if value is empty', () {
+    expect(sut.validate(''), 'Campo obrigatório');
   });
 }
