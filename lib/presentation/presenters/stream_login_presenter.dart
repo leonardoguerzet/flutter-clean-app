@@ -66,5 +66,4 @@ class StreamLoginPresenter {
     _controller?.close();
     _controller = null;
   }
-
 }
