@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:flutter_clean_app/domain/helpers/domain_error.dart';
 import 'package:meta/meta.dart';
 
+import '../../domain/helpers/domain_error.dart';
 import '../../domain/usecases/authentication.dart';
 
 import '../protocols/protocols.dart';

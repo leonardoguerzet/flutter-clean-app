@@ -1,9 +1,9 @@
 import 'package:faker/faker.dart';
-import 'package:flutter_clean_app/domain/entities/account_entity.dart';
-import 'package:flutter_clean_app/domain/helpers/domain_error.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import 'package:flutter_clean_app/domain/entities/entities.dart';
+import 'package:flutter_clean_app/domain/helpers/helpers.dart';
 import 'package:flutter_clean_app/domain/usecases/authentication.dart';
 
 import 'package:flutter_clean_app/presentation/presenters/presenters.dart';
@@ -152,6 +152,18 @@ void main() {
     expectLater(sut.isLoadingStream, emits(false));
     sut.mainErrorStream
         .listen(expectAsync1((error) => expect(error, 'Credenciais inválidas.')));
+
+    await sut.auth();
+  });
+
+  test('Should emit correct events on UnexpectedError', () async {
+    mockAuthenticationError(DomainError.unexpected);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emits(false));
+    sut.mainErrorStream
+        .listen(expectAsync1((error) => expect(error, 'Algo errado aconteceu. Tente novamente em breve')));
 
     await sut.auth();
   });
