@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 class EmailValidation implements FieldValidation {
   final String field;
+
   EmailValidation(this.field);
 
   String validate(String value) {
@@ -10,23 +11,18 @@ class EmailValidation implements FieldValidation {
   }
 }
 
-void main(){
+void main() {
+  EmailValidation sut;
 
-  test('Should return null if email is empty', (){
-    final sut = EmailValidation('any_field');
-
-    final error = sut.validate('');
-
-    expect(error, null);
+  setUp(() {
+    sut = EmailValidation('any_field');
   });
 
+  test('Should return null if email is empty', () {
+    expect(sut.validate(''), null);
+  });
 
-  test('Should return null if email is null', (){
-    final sut = EmailValidation('any_field');
-
-    final error = sut.validate(null);
-
-    expect(error, null);
+  test('Should return null if email is null', () {
+    expect(sut.validate(null), null);
   });
 }
-
