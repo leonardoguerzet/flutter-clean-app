@@ -1,5 +1,7 @@
-import 'package:flutter_clean_app/validation/protocols/field_validation.dart';
+import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'package:flutter_clean_app/validation/protocols/field_validation.dart';
 
 class EmailValidation implements FieldValidation {
   final String field;
@@ -24,5 +26,9 @@ void main() {
 
   test('Should return null if email is null', () {
     expect(sut.validate(null), null);
+  });
+
+  test('Should return null if email is valid', () {
+    expect(sut.validate(faker.internet.email()), null);
   });
 }
