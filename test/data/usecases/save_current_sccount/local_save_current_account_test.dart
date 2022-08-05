@@ -2,10 +2,10 @@ import 'package:faker/faker.dart';
 import 'package:flutter_clean_app/domain/helpers/domain_error.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:meta/meta.dart';
+import 'package:mockito/mockito.dart';
 
 import 'package:flutter_clean_app/domain/entities/entities.dart';
 import 'package:flutter_clean_app/domain/usecases/usecases.dart';
-import 'package:mockito/mockito.dart';
 
 class LocalSaveCurrentAccount implements SaveCurrentAccount {
   final SaveSecureCacheStorage saveSecureCacheStorage;
@@ -13,9 +13,10 @@ class LocalSaveCurrentAccount implements SaveCurrentAccount {
   LocalSaveCurrentAccount({@required this.saveSecureCacheStorage});
 
   Future<void> save(AccountEntity account) async {
-    try{
-      await saveSecureCacheStorage.saveSecure(key: 'token', value: account.token);
-    } catch(error) {
+    try {
+      await saveSecureCacheStorage.saveSecure(
+          key: 'token', value: account.token);
+    } catch (error) {
       throw DomainError.unexpected;
     }
   }
@@ -32,12 +33,18 @@ class SaveSecureCacheStorageSpy extends Mock implements SaveSecureCacheStorage {
 }
 
 void main() {
-  test('Should call SaveSecureCacheStorage with correct values', () async {
-    final saveSecureCacheStorage = SaveSecureCacheStorageSpy();
-    final sut =
-        LocalSaveCurrentAccount(saveSecureCacheStorage: saveSecureCacheStorage);
-    final account = AccountEntity(faker.guid.guid());
+  LocalSaveCurrentAccount sut;
+  SaveSecureCacheStorageSpy saveSecureCacheStorage;
+  AccountEntity account;
 
+  setUp(() {
+    saveSecureCacheStorage = SaveSecureCacheStorageSpy();
+    sut =
+        LocalSaveCurrentAccount(saveSecureCacheStorage: saveSecureCacheStorage);
+    account = AccountEntity(faker.guid.guid());
+  });
+
+  test('Should call SaveSecureCacheStorage with correct values', () async {
     await sut.save(account);
 
     verify(
@@ -46,10 +53,6 @@ void main() {
 
   test('Should throw UnexpectedError if SaveSecureCacheStorage throws',
       () async {
-    final saveSecureCacheStorage = SaveSecureCacheStorageSpy();
-    final sut =
-        LocalSaveCurrentAccount(saveSecureCacheStorage: saveSecureCacheStorage);
-    final account = AccountEntity(faker.guid.guid());
     when(saveSecureCacheStorage.saveSecure(
             key: anyNamed('key'), value: anyNamed('value')))
         .thenThrow(Exception());
