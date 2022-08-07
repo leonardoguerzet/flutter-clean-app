@@ -1,3 +1,4 @@
+import 'package:flutter_clean_app/domain/usecases/save_current_account.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
@@ -11,6 +12,7 @@ import '../protocols/protocols.dart';
 class GetxLoginPresenter extends GetxController implements LoginPresenter {
   final Validation validation;
   final Authentication authentication;
+  final SaveCurrentAccount saveCurrentAccount;
 
   String _email;
   String _password;
@@ -33,6 +35,7 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   GetxLoginPresenter({
     @required this.validation,
     @required this.authentication,
+    @required this.saveCurrentAccount,
   });
 
   void validateEmail(String email) {
@@ -49,17 +52,18 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   }
 
   void _validateForm() {
-    _isFormValid.value = _emailError.value == null
-        && _passwordError.value == null
-        && _email != null
-        && _password != null;
+    _isFormValid.value = _emailError.value == null &&
+        _passwordError.value == null &&
+        _email != null &&
+        _password != null;
   }
 
   Future<void> auth() async {
     _isLoading.value = true;
     try {
-      await authentication.auth(
-          AuthenticationParams(email: _email, secret: _password));
+      final account = await authentication
+          .auth(AuthenticationParams(email: _email, secret: _password));
+      await saveCurrentAccount.save(account);
     } on DomainError catch (error) {
       _mainError.value = error.description;
     }
