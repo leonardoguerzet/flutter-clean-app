@@ -5,7 +5,6 @@ import 'package:get/route_manager.dart';
 import '../ui/components/components.dart';
 import './factories/factories.dart';
 
-
 void main() {
   runApp(App());
 }
@@ -13,7 +12,6 @@ void main() {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return GetMaterialApp(
@@ -23,6 +21,7 @@ class App extends StatelessWidget {
       initialRoute: '/login',
       getPages: [
         GetPage(name: '/login', page: makeLoginPage),
+        GetPage(name: '/surverys', page: () => Scaffold(body: Text('Enquetes'))),
       ],
     );
   }
