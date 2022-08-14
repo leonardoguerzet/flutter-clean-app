@@ -9,14 +9,14 @@ class ValidationComposite implements Validation {
 
   ValidationComposite(this.validations);
 
-  String validate({
+  ValidationError validate({
     @required String field,
     @required String value,
   }) {
-    String error;
+    ValidationError error;
     for (final validation in validations.where((v) => v.field == field)) {
       error = validation.validate(value);
-      if(error?.isNotEmpty == true){
+      if(error != null){
         return error;
       }
     }

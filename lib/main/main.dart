@@ -22,7 +22,7 @@ class App extends StatelessWidget {
       getPages: [
         GetPage(name: '/', page: makeSplashPage, transition: Transition.fade),
         GetPage(name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
-        GetPage(name: '/surverys', page: () => Scaffold(body: Text('Enquetes')), transition: Transition.fadeIn),
+        GetPage(name: '/surveys', page: () => Scaffold(body: Text('Enquetes')), transition: Transition.fadeIn),
       ],
     );
   }
