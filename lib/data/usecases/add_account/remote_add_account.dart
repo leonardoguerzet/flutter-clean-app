@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import '../../../domain/helpers/helpers.dart';
 import '../../../domain/usecases/usecases.dart';
 
 import '../../http/http.dart';
@@ -12,7 +13,11 @@ class RemoteAddAccount {
 
   Future<void> add(AddAccountParams params) async {
     final body = RemoteAddAccountParams.fromDomain(params).toJson();
-    await httpClient.request(url: url, method: 'post', body: body);
+    try {
+      await httpClient.request(url: url, method: 'post', body: body);
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 
@@ -30,7 +35,16 @@ class RemoteAddAccountParams {
   });
 
   factory RemoteAddAccountParams.fromDomain(AddAccountParams params) =>
-      RemoteAddAccountParams(name: params.name, email: params.email, password: params.password, passwordConfirmation: params.passwordConfirmation);
+      RemoteAddAccountParams(
+          name: params.name,
+          email: params.email,
+          password: params.password,
+          passwordConfirmation: params.passwordConfirmation);
 
-  Map toJson() => {'name': name, 'email': email, 'password': password, 'passwordConfirmation': passwordConfirmation,};
+  Map toJson() => {
+        'name': name,
+        'email': email,
+        'password': password,
+        'passwordConfirmation': passwordConfirmation,
+      };
 }
