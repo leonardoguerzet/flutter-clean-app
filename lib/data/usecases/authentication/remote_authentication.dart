@@ -27,8 +27,8 @@ class RemoteAuthentication implements Authentication {
 }
 
 class RemoteAuthenticationParams {
-  String email;
-  String password;
+  final String email;
+  final String password;
 
   RemoteAuthenticationParams({
     @required this.email,
