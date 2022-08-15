@@ -17,7 +17,7 @@ void main() {
   AuthenticationParams params;
 
   Map mockValidData() =>
-      {'acessToken': faker.guid.guid(), 'name': faker.person.name()};
+      {'accessToken': faker.guid.guid(), 'name': faker.person.name()};
 
   PostExpectation mockRequest() {
     return when(httpClient.request(
@@ -45,12 +45,9 @@ void main() {
   });
 
   test('Should call HttpClient with correct values', () async {
-    when(httpClient.request(
-            url: anyNamed('url'),
-            method: anyNamed('method'),
-            body: anyNamed('body')))
+    mockRequest()
         .thenAnswer((_) async =>
-            {'acessToken': faker.guid.guid(), 'name': faker.person.name()});
+            {'accessToken': faker.guid.guid(), 'name': faker.person.name()});
     await sut.auth(params);
 
     verify(httpClient.request(
@@ -83,7 +80,7 @@ void main() {
     expect(future, throwsA(DomainError.unexpected));
   });
 
-  test('Should throw InvalidCredetialsError if HttpClient returns 401',
+  test('Should throw InvalidCredentialsError if HttpClient returns 401',
       () async {
         mockHttpError(HttpError.unauthorized);
 
@@ -99,7 +96,7 @@ void main() {
 
     final account = await sut.auth(params);
 
-    expect(account.token, validData['acessToken']);
+    expect(account.token, validData['accessToken']);
   });
 
   test(

@@ -8,8 +8,8 @@ abstract class Authentication {
 }
 
 class AuthenticationParams extends Equatable {
-  String email;
-  String secret;
+  final String email;
+  final String secret;
 
   @override
   List get props => [email, secret];
