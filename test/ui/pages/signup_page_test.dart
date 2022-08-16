@@ -12,7 +12,6 @@ import 'package:flutter_clean_app/ui/pages/pages.dart';
 class SignUpPresenterSpy extends Mock implements SignUpPresenter {}
 
 void main() {
-
   SignUpPresenter presenter;
   StreamController<UIError> nameErrorController;
   StreamController<UIError> emailErrorController;
@@ -27,10 +26,14 @@ void main() {
   }
 
   void mockStreams() {
-    when(presenter.nameErrorStream).thenAnswer((_) => nameErrorController.stream);
-    when(presenter.emailErrorStream).thenAnswer((_) => emailErrorController.stream);
-    when(presenter.passwordErrorStream).thenAnswer((_) => passwordErrorController.stream);
-    when(presenter.passwordConfirmationErrorStream).thenAnswer((_) => passwordConfirmationErrorController.stream);
+    when(presenter.nameErrorStream)
+        .thenAnswer((_) => nameErrorController.stream);
+    when(presenter.emailErrorStream)
+        .thenAnswer((_) => emailErrorController.stream);
+    when(presenter.passwordErrorStream)
+        .thenAnswer((_) => passwordErrorController.stream);
+    when(presenter.passwordConfirmationErrorStream)
+        .thenAnswer((_) => passwordConfirmationErrorController.stream);
   }
 
   void closeStreams() {
@@ -57,36 +60,36 @@ void main() {
     await tester.pumpWidget(signUpPage);
   }
 
-  testWidgets('Should load with correct initial state', (WidgetTester tester) async {
+  testWidgets('Should load with correct initial state',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
-    final nameTextChildren = find.descendant(of: find.bySemanticsLabel('Nome'), matching: find.byType(Text));
-    expect(
-        nameTextChildren,
-        findsOneWidget,
-        reason: 'when a TextFormField has only one text child, means it has no errors, since one of the children is always the label text'
-    );
+    final nameTextChildren = find.descendant(
+        of: find.bySemanticsLabel('Nome'), matching: find.byType(Text));
+    expect(nameTextChildren, findsOneWidget,
+        reason:
+            'when a TextFormField has only one text child, means it has no errors, since one of the children is always the label text');
 
-    final passwordTextChildren = find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text));
-    expect(
-        passwordTextChildren,
-        findsOneWidget,
-        reason: 'when a TextFormField has only one text child, means it has no errors, since one of the children is always the label text'
-    );
+    final passwordTextChildren = find.descendant(
+        of: find.bySemanticsLabel('Senha'), matching: find.byType(Text));
+    expect(passwordTextChildren, findsOneWidget,
+        reason:
+            'when a TextFormField has only one text child, means it has no errors, since one of the children is always the label text');
 
-    final passwordConfirmationTextChildren = find.descendant(of: find.bySemanticsLabel('Confirmar senha'), matching: find.byType(Text));
-    expect(
-        passwordConfirmationTextChildren,
-        findsOneWidget,
-        reason: 'when a TextFormField has only one text child, means it has no errors, since one of the children is always the label text'
-    );
+    final passwordConfirmationTextChildren = find.descendant(
+        of: find.bySemanticsLabel('Confirmar senha'),
+        matching: find.byType(Text));
+    expect(passwordConfirmationTextChildren, findsOneWidget,
+        reason:
+            'when a TextFormField has only one text child, means it has no errors, since one of the children is always the label text');
 
     final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
     expect(button.onPressed, null);
     expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
-  testWidgets('Should call validate with correct values', (WidgetTester tester) async {
+  testWidgets('Should call validate with correct values',
+      (WidgetTester tester) async {
     await loadPage(tester);
 
     final name = faker.person.name();
@@ -103,5 +106,22 @@ void main() {
 
     await tester.enterText(find.bySemanticsLabel('Confirmar senha'), password);
     verify(presenter.validatePasswordConfirmation(password));
+  });
+
+  testWidgets('Should present email error', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add(UIError.invalidField);
+    await tester.pump();
+    expect(find.text('Campo inválido.'), findsOneWidget);
+
+    emailErrorController.add(UIError.requiredField);
+    await tester.pump();
+    expect(find.text('Campo obrigatório.'), findsOneWidget);
+
+    emailErrorController.add(null);
+    await tester.pump();
+    expect(find.descendant(of: find.bySemanticsLabel('Email'), matching: find.byType(Text)), findsOneWidget
+    );
   });
 }
