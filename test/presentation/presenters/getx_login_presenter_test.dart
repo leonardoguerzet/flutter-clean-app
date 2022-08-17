@@ -180,7 +180,6 @@ void main() {
     await sut.auth();
   });
 
-
   test('Should emit correct events on Authentication sucess', () async {
     sut.validateEmail(email);
     sut.validatePassword(password);
@@ -189,7 +188,6 @@ void main() {
 
     await sut.auth();
   });
-
 
   test('Should change page on sucess', () async {
     sut.validateEmail(email);
