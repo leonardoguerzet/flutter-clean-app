@@ -174,8 +174,10 @@ void main() {
     await loadPage(tester);
 
     isFormValidController.add(true);
+    final button = find.byType(RaisedButton);
     await tester.pump();
-    await tester.tap(find.byType(RaisedButton));
+    await tester.ensureVisible(button);
+    await tester.tap(button);
     await tester.pump();
 
     verify(presenter.auth()).called(1);
