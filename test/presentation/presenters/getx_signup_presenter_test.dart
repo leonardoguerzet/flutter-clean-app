@@ -12,11 +12,13 @@ import 'package:flutter_clean_app/presentation/protocols/protocols.dart';
 
 class ValidationSpy extends Mock implements Validation {}
 class AddAccountSpy extends Mock implements AddAccount {}
+class SaveCurrentAccountSpy extends Mock implements SaveCurrentAccount{}
 
 void main() {
   GetxSignUpPresenter sut;
   ValidationSpy validation;
   AddAccountSpy addAccount;
+  SaveCurrentAccountSpy saveCurrentAccount;
   String email;
   String name;
   String password;
@@ -42,7 +44,8 @@ void main() {
   setUp(() {
     validation = ValidationSpy();
     addAccount = AddAccountSpy();
-    sut = GetxSignUpPresenter(validation: validation, addAccount: addAccount);
+    saveCurrentAccount = SaveCurrentAccountSpy();
+    sut = GetxSignUpPresenter(validation: validation, addAccount: addAccount, saveCurrentAccount: saveCurrentAccount);
     email = faker.internet.email();
     name = faker.person.name();
     password = faker.internet.password();
@@ -231,5 +234,16 @@ void main() {
 
     verify(addAccount.add(
         AddAccountParams(name: name, email: email, password: password, passwordConfirmation: passwordConfirmation))).called(1);
+  });
+
+  test('Should call SaveCurrentAccount with correct value', () async {
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+
+    await sut.signUp();
+
+    verify(saveCurrentAccount.save(AccountEntity(token))).called(1);
   });
 }
