@@ -44,10 +44,10 @@ void main() {
     mockAuthenticationCall().thenThrow(error);
   }
 
-  PostExpectation mockSaveACurrentAccountCall() => when(saveCurrentAccount.save(any));
+  PostExpectation mockSaveCurrentAccountCall() => when(saveCurrentAccount.save(any));
 
-  void mockSaveACurrentAccountError() {
-    mockSaveACurrentAccountCall().thenThrow(DomainError.unexpected);
+  void mockSaveCurrentAccountError() {
+    mockSaveCurrentAccountCall().thenThrow(DomainError.unexpected);
   }
 
   setUp(() {
@@ -168,7 +168,7 @@ void main() {
   });
 
   test('Should emit UnexpectedError if SaveCurrentAccount fails', () async {
-    mockSaveACurrentAccountError();
+    mockSaveCurrentAccountError();
     sut.validateEmail(email);
     sut.validatePassword(password);
 
