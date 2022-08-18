@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
+import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/usecases.dart';
 
 import '../../ui/helpers/errors/errors.dart';
@@ -16,7 +17,9 @@ class GetxSignUpPresenter extends GetxController {
   final _nameError = Rx<UIError>();
   final _passwordError = Rx<UIError>();
   final _passwordConfirmationError = Rx<UIError>();
+  final _mainError = Rx<UIError>();
   final _isFormValid = false.obs;
+  final _isLoading = false.obs;
 
   String _name;
   String _email;
@@ -24,15 +27,12 @@ class GetxSignUpPresenter extends GetxController {
   String _passwordConfirmation;
 
   Stream<UIError> get emailErrorStream => _emailError.stream;
-
   Stream<UIError> get nameErrorStream => _nameError.stream;
-
   Stream<UIError> get passwordErrorStream => _passwordError.stream;
-
-  Stream<UIError> get passwordConfirmationErrorStream =>
-      _passwordConfirmationError.stream;
-
+  Stream<UIError> get passwordConfirmationErrorStream => _passwordConfirmationError.stream;
+  Stream<UIError> get mainErrorStream => _mainError.stream;
   Stream<bool> get isFormValidStream => _isFormValid.stream;
+  Stream<bool> get isLoadingStream => _isLoading.stream;
 
   GetxSignUpPresenter({
     @required this.validation,
@@ -89,11 +89,19 @@ class GetxSignUpPresenter extends GetxController {
   }
 
   Future<void> signUp() async {
-    final account = await addAccount.add(AddAccountParams(
-        name: _name,
-        email: _email,
-        password: _password,
-        passwordConfirmation: _passwordConfirmation));
-    await saveCurrentAccount.save(account);
+    try {
+      _isLoading.value = true;
+      final account = await addAccount.add(AddAccountParams(
+          name: _name,
+          email: _email,
+          password: _password,
+          passwordConfirmation: _passwordConfirmation));
+      await saveCurrentAccount.save(account);
+    } on DomainError catch(error){
+      switch(error){
+        default: _mainError.value = UIError.unexpected; break;
+      }
+    }
+    _isLoading.value = false;
   }
 }
