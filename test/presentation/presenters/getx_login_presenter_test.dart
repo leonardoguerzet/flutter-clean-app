@@ -180,7 +180,7 @@ void main() {
     await sut.auth();
   });
 
-  test('Should emit correct events on Authentication sucess', () async {
+  test('Should emit correct events on Authentication success', () async {
     sut.validateEmail(email);
     sut.validatePassword(password);
 
@@ -189,7 +189,7 @@ void main() {
     await sut.auth();
   });
 
-  test('Should change page on sucess', () async {
+  test('Should change page on success', () async {
     sut.validateEmail(email);
     sut.validatePassword(password);
 
@@ -224,5 +224,13 @@ void main() {
         expect(error, UIError.unexpected)));
 
     await sut.auth();
+  });
+
+  test('Should go to SignUpPage on link click', () async {
+    sut.navigateToStream
+        .listen(expectAsync1((page) =>
+        expect(page, '/signup')));
+
+    sut.goToSignUp();
   });
 }
