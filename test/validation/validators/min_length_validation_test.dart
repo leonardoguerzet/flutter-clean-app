@@ -1,20 +1,10 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:meta/meta.dart';
 
-import 'package:flutter_clean_app/validation/protocols/protocols.dart';
 import 'package:flutter_clean_app/presentation/protocols/protocols.dart';
 
-class MinLengthValidation implements FieldValidation {
-  final String field;
-  final int size;
+import 'package:flutter_clean_app/validation/validators/validators.dart';
 
-  MinLengthValidation({@required this.field, @required this.size});
-
-  ValidationError validate(String value) {
-    return value != null && value.length >= size ? null : ValidationError.invalidField;
-  }
-}
 
 void main() {
   MinLengthValidation sut;
