@@ -4,12 +4,18 @@ import 'package:flutter_clean_app/presentation/protocols/protocols.dart';
 
 import 'package:flutter_clean_app/validation/validators/validators.dart';
 
-
 void main() {
   CompareFieldsValidation sut;
 
   setUp(() {
-    sut = CompareFieldsValidation(field: 'any_field', fieldToCompare: 'other_field');
+    sut = CompareFieldsValidation(
+        field: 'any_field', fieldToCompare: 'other_field');
+  });
+
+  test('Should return null on invalid cases', () {
+    expect(sut.validate({'any_field': 'any_value'}), null);
+    expect(sut.validate({'other_field': 'other_value'}), null);
+    expect(sut.validate({}), null);
   });
 
   test('Should return error if values are not equal', () {
