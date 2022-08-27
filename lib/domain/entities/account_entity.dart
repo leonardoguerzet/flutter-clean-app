@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 class AccountEntity extends Equatable {
@@ -6,5 +7,5 @@ class AccountEntity extends Equatable {
   @override
   List get props => [token];
 
-  AccountEntity({this.token});
+  AccountEntity({@required this.token});
 }
