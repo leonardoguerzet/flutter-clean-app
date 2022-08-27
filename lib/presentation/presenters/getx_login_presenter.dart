@@ -24,10 +24,15 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
   final _isLoading = false.obs;
 
   Stream<UIError> get emailErrorStream => _emailError.stream;
+
   Stream<UIError> get passwordErrorStream => _passwordError.stream;
+
   Stream<UIError> get mainErrorStream => _mainError.stream;
+
   Stream<String> get navigateToStream => _navigateTo.stream;
+
   Stream<bool> get isFormValidStream => _isFormValid.stream;
+
   Stream<bool> get isLoadingStream => _isLoading.stream;
 
   GetxLoginPresenter({
@@ -44,21 +49,23 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
 
   void validatePassword(String password) {
     _password = password;
-    _passwordError.value =
-        _validateField('password');
+    _passwordError.value = _validateField('password');
     _validateForm();
   }
 
-  UIError _validateField(String field){
+  UIError _validateField(String field) {
     final formData = {
       'email': _email,
       'password': _password,
     };
     final error = validation.validate(field: field, input: formData);
-    switch(error){
-      case ValidationError.invalidField: return UIError.invalidField;
-      case ValidationError.requiredField: return UIError.requiredField;
-      default: return null;
+    switch (error) {
+      case ValidationError.invalidField:
+        return UIError.invalidField;
+      case ValidationError.requiredField:
+        return UIError.requiredField;
+      default:
+        return null;
     }
   }
 
@@ -71,20 +78,23 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
 
   Future<void> auth() async {
     try {
+      _mainError.value = null;
       _isLoading.value = true;
       final account = await authentication
           .auth(AuthenticationParams(email: _email, secret: _password));
       await saveCurrentAccount.save(account);
       _navigateTo.value = '/surveys';
     } on DomainError catch (error) {
-      switch(error){
-        case DomainError.invalidCredentials: _mainError.value = UIError.invalidCredentials; break;
+      switch (error) {
+        case DomainError.invalidCredentials: _mainError.value = UIError.invalidCredentials;
+          break;
         default: _mainError.value = UIError.unexpected;
       }
       _isLoading.value = false;
     }
   }
-  void goToSignUp(){
+
+  void goToSignUp() {
     _navigateTo.value = '/signup';
   }
 }
