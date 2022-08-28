@@ -8,7 +8,7 @@ import 'package:flutter_clean_app/domain/helpers/helpers.dart';
 import 'package:flutter_clean_app/data/usecases/usecases.dart';
 import 'package:flutter_clean_app/data/http/http.dart';
 
-class HttpClientSpy extends Mock implements HttpClient {}
+class HttpClientSpy extends Mock implements HttpClient<Map> {}
 
 void main() {
   RemoteAuthentication sut;
