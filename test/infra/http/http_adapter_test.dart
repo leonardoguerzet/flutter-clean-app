@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
 
-
 import 'package:flutter_clean_app/data/http/http.dart';
 import 'package:flutter_clean_app/infra/http/http.dart';
 
@@ -20,9 +19,9 @@ void main() {
     url = faker.internet.httpUrl();
   });
 
-  group('shared', (){
+  group('shared', () {
     test('Should throw ServerError if invalid method is provided', () async {
-     final future = sut.request(url: url, method: 'invalid_method');
+      final future = sut.request(url: url, method: 'invalid_method');
 
       expect(future, throwsA(HttpError.serverError));
     });
@@ -67,7 +66,10 @@ void main() {
     });
 
     test('Should return data if post returns 200', () async {
-      final response = await sut.request(url: url, method: 'post',);
+      final response = await sut.request(
+        url: url,
+        method: 'post',
+      );
 
       expect(response, {'any_key': 'any_value'});
     });
@@ -181,6 +183,34 @@ void main() {
 
       expect(future, throwsA(HttpError.serverError));
     });
+  });
 
+  group('get', () {
+    PostExpectation mockRequest() =>
+        when(client.get(any, headers: anyNamed('headers')));
+
+    void mockResponse(int statusCode,
+        {String body = '{"any_key":"any_value"}'}) {
+      mockRequest().thenAnswer((_) async => Response(body, statusCode));
+    }
+
+    setUp(() {
+      mockResponse(200);
+    });
+
+    test('Should call get with correct values', () async {
+      await sut.request(
+        url: url,
+        method: 'get',
+      );
+
+      verify(client.get(
+        url,
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json',
+        },
+      ));
+    });
   });
 }
