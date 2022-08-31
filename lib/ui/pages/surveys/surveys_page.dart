@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'components/components.dart';
 import '../../components/components.dart';
@@ -30,27 +31,26 @@ class SurveysPage extends StatelessWidget {
           return StreamBuilder<List<SurveyViewModel>>(
             stream: presenter.loadSurveysStream,
             builder: (context, snapshot) {
-              if(snapshot.hasError){
+              if(snapshot.hasError) {
                 return Column(children: [
                   Text(snapshot.error),
                   RaisedButton(onPressed: null, child: Text(R.strings.reload),),
                 ],);
               }
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 20,
-                ),
-                child: CarouselSlider(
-                    items: [
-                      SurveyItem(),
-                      SurveyItem(),
-                      SurveyItem(),
-                    ],
-                    options: CarouselOptions(
-                      enlargeCenterPage: true,
-                      aspectRatio: 1,
-                    )),
-              );
+              if(snapshot.hasData){
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                  ),
+                  child: CarouselSlider(
+                      items: snapshot.data.map((viewModel) => SurveyItem(viewModel)).toList(),
+                      options: CarouselOptions(
+                        enlargeCenterPage: true,
+                        aspectRatio: 1,
+                      )),
+                );
+              }
+              return SizedBox();
             }
           );
         },
