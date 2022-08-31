@@ -13,7 +13,7 @@ class SurveyItem extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Theme.of(context).secondaryHeaderColor,
+          color: viewModel.didAnswer ? Theme.of(context).secondaryHeaderColor : Theme.of(context).primaryColorDark,
           boxShadow: [
             BoxShadow(
               offset: Offset(0, 1),
@@ -30,7 +30,7 @@ class SurveyItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '20 ago 2022',
+              viewModel.dateTime,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,

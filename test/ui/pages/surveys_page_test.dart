@@ -45,8 +45,8 @@ void main() {
   }
 
   List<SurveyViewModel> makeSurveys() => [
-    SurveyViewModel(id: '1', question: 'Question 1', dateTime: 'Any Date', didAnswer: true),
-    SurveyViewModel(id: '2', question: 'Question 2', dateTime: 'Any Date', didAnswer: false),
+    SurveyViewModel(id: '1', question: 'Question 1', dateTime: 'Date 1', didAnswer: true),
+    SurveyViewModel(id: '2', question: 'Question 2', dateTime: 'Date 2', didAnswer: false),
   ];
 
   tearDown((){
@@ -100,5 +100,7 @@ void main() {
     expect(find.text('Recarregar'), findsNothing);
     expect(find.text('Question 1'), findsWidgets);
     expect(find.text('Question 2'), findsWidgets);
+    expect(find.text('Date 1'), findsWidgets);
+    expect(find.text('Date 2'), findsWidgets);
   });
 }
