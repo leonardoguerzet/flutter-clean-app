@@ -1,10 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-import 'components/components.dart';
 import '../../components/components.dart';
 import '../../helpers/helpers.dart';
+import '../../pages/pages.dart';
+import '../surveys/components/components.dart';
 
 class SurveysPage extends StatelessWidget {
   final SurveysPresenter presenter;
@@ -29,7 +29,7 @@ class SurveysPage extends StatelessWidget {
           });
 
           return StreamBuilder<List<SurveyViewModel>>(
-            stream: presenter.loadSurveysStream,
+            stream: presenter.surveysStream,
             builder: (context, snapshot) {
               if(snapshot.hasError) {
                 return Column(children: [
