@@ -1,11 +1,13 @@
 import 'package:meta/meta.dart';
 
-import 'package:flutter_clean_app/domain/entities/entities.dart';
-import 'package:flutter_clean_app/domain/helpers/helpers.dart';
-import 'package:flutter_clean_app/data/cache/cache.dart';
-import 'package:flutter_clean_app/data/models/models.dart';
+import '../../../domain/entities/entities.dart';
+import '../../../domain/helpers/helpers.dart';
+import '../../../domain/usecases/load_surveys.dart';
 
-class LocalLoadSurveys {
+import '../../cache/cache.dart';
+import '../../models/models.dart';
+
+class LocalLoadSurveys implements LoadSurveys {
   final FetchCacheStorage fetchCacheStorage;
 
   LocalLoadSurveys({@required this.fetchCacheStorage});
