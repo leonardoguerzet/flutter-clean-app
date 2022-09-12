@@ -205,11 +205,22 @@ void main() {
     CacheStorageSpy cacheStorage;
     List<SurveyEntity> surveys;
 
+    PostExpectation mockSaveCall() =>
+        when(cacheStorage.save(key: anyNamed('key'), value: anyNamed('value')));
+
+    void mockSaveError() => mockSaveCall().thenThrow(Exception());
+
     List<SurveyEntity> mockSurveys() => [
           SurveyEntity(
-              id: faker.guid.guid(), question: faker.randomGenerator.string(10), dateTime: DateTime.utc(2022, 9, 12), didAnswer: true),
+              id: faker.guid.guid(),
+              question: faker.randomGenerator.string(10),
+              dateTime: DateTime.utc(2022, 9, 12),
+              didAnswer: true),
           SurveyEntity(
-              id: faker.guid.guid(), question: faker.randomGenerator.string(10), dateTime: DateTime.utc(2021, 3, 10), didAnswer: false),
+              id: faker.guid.guid(),
+              question: faker.randomGenerator.string(10),
+              dateTime: DateTime.utc(2021, 3, 10),
+              didAnswer: false),
         ];
 
     setUp(() {
@@ -219,12 +230,13 @@ void main() {
     });
 
     test('Should call CacheStorage with correct values', () async {
-      final list = [{
-        'id': surveys[0].id,
-        'question': surveys[0].question,
-        'date': '2022-09-12T00:00:00.000Z',
-        'didAnswer': 'true',
-      },
+      final list = [
+        {
+          'id': surveys[0].id,
+          'question': surveys[0].question,
+          'date': '2022-09-12T00:00:00.000Z',
+          'didAnswer': 'true',
+        },
         {
           'id': surveys[1].id,
           'question': surveys[1].question,
@@ -235,6 +247,14 @@ void main() {
       await sut.save(surveys);
 
       verify(cacheStorage.save(key: 'surveys', value: list)).called(1);
+    });
+
+    test('Should throw UnexpectedError if save throws', () async {
+      mockSaveError();
+
+      final future = sut.save(surveys);
+
+      expect(future, throwsA(DomainError.unexpected));
     });
   });
 }
