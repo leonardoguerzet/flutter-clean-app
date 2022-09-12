@@ -128,19 +128,19 @@ void main() {
     List<Map> data;
 
     List<Map> mockValidData() => [
-      {
-        'id': faker.guid.guid(),
-        'question': faker.randomGenerator.string(10),
-        'date': '2022-09-06T00:00:00Z',
-        'didAnswer': 'false',
-      },
-      {
-        'id': faker.guid.guid(),
-        'question': faker.randomGenerator.string(10),
-        'date': '2021-02-03T00:00:00Z',
-        'didAnswer': 'true',
-      }
-    ];
+          {
+            'id': faker.guid.guid(),
+            'question': faker.randomGenerator.string(10),
+            'date': '2022-09-06T00:00:00Z',
+            'didAnswer': 'false',
+          },
+          {
+            'id': faker.guid.guid(),
+            'question': faker.randomGenerator.string(10),
+            'date': '2021-02-03T00:00:00Z',
+            'didAnswer': 'true',
+          }
+        ];
 
     PostExpectation mockFetchCall() => when(cacheStorage.fetch(any));
 
@@ -198,6 +198,43 @@ void main() {
 
       verify(cacheStorage.delete('surveys')).called(1);
     });
+  });
 
+  group('save', () {
+    LocalLoadSurveys sut;
+    CacheStorageSpy cacheStorage;
+    List<SurveyEntity> surveys;
+
+    List<SurveyEntity> mockSurveys() => [
+          SurveyEntity(
+              id: faker.guid.guid(), question: faker.randomGenerator.string(10), dateTime: DateTime.utc(2022, 9, 12), didAnswer: true),
+          SurveyEntity(
+              id: faker.guid.guid(), question: faker.randomGenerator.string(10), dateTime: DateTime.utc(2021, 3, 10), didAnswer: false),
+        ];
+
+    setUp(() {
+      cacheStorage = CacheStorageSpy();
+      sut = LocalLoadSurveys(cacheStorage: cacheStorage);
+      surveys = mockSurveys();
+    });
+
+    test('Should call CacheStorage with correct values', () async {
+      final list = [{
+        'id': surveys[0].id,
+        'question': surveys[0].question,
+        'date': '2022-09-12T00:00:00.000Z',
+        'didAnswer': 'true',
+      },
+        {
+          'id': surveys[1].id,
+          'question': surveys[1].question,
+          'date': '2021-03-10T00:00:00.000Z',
+          'didAnswer': 'false',
+        },
+      ];
+      await sut.save(surveys);
+
+      verify(cacheStorage.save(key: 'surveys', value: list)).called(1);
+    });
   });
 }
