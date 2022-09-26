@@ -55,13 +55,13 @@ void main() {
   });
 
   test('Should call HttpClient with correct values', () async {
-    await sut.load();
+    await sut.loadBySurvey();
 
     verify(httpClient.request(url: url, method: 'get'));
   });
 
   test('Should return surveys on 200', () async {
-    final surveys = await sut.load();
+    final surveys = await sut.loadBySurvey();
 
     expect(surveys, [
       SurveyEntity(
@@ -83,7 +83,7 @@ void main() {
       'Should throw UnexpectedError if HttpClient returns 200 with invalid data', () async {
     mockHttpData([{'invalid_key': 'invalid_value'}]);
 
-    final future = sut.load();
+    final future = sut.loadBySurvey();
 
     expect(future, throwsA(DomainError.unexpected));
   });
@@ -91,7 +91,7 @@ void main() {
   test('Should throw UnexpectedError if HttpClient returns 404', () async {
     mockHttpError(HttpError.notFound);
 
-    final future = sut.load();
+    final future = sut.loadBySurvey();
 
     expect(future, throwsA(DomainError.unexpected));
   });
@@ -99,7 +99,7 @@ void main() {
   test('Should throw UnexpectedError if HttpClient returns 500', () async {
     mockHttpError(HttpError.serverError);
 
-    final future = sut.load();
+    final future = sut.loadBySurvey();
 
     expect(future, throwsA(DomainError.unexpected));
   });
@@ -107,7 +107,7 @@ void main() {
   test('Should throw AccessDenied if HttpClient returns 403', () async {
     mockHttpError(HttpError.forbidden);
 
-    final future = sut.load();
+    final future = sut.loadBySurvey();
 
     expect(future, throwsA(DomainError.accessDenied));
   });

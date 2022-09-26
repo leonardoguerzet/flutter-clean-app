@@ -14,9 +14,9 @@ class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
     @required this.local,
   });
 
-  Future<List<SurveyEntity>> load() async {
+  Future<List<SurveyEntity>> loadBySurvey() async {
     try {
-      final surveys = await remote.load();
+      final surveys = await remote.loadBySurvey();
       await local.save(surveys);
       return surveys;
     } catch(error){
@@ -24,7 +24,7 @@ class RemoteLoadSurveysWithLocalFallback implements LoadSurveys {
         rethrow;
       }
       await local.validate();
-      return await local.load();
+      return await local.loadBySurvey();
     }
   }
 }

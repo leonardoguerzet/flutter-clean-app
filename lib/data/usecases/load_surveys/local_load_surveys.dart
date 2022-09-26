@@ -12,7 +12,7 @@ class LocalLoadSurveys implements LoadSurveys {
 
   LocalLoadSurveys({@required this.cacheStorage});
 
-  Future<List<SurveyEntity>> load() async {
+  Future<List<SurveyEntity>> loadBySurvey() async {
     try {
       final data = await cacheStorage.fetch('surveys');
       if (data?.isEmpty != false) {

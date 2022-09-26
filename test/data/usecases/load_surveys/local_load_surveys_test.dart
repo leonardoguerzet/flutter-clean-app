@@ -47,13 +47,13 @@ void main() {
     });
 
     test('Should call CacheStorage with correct key', () async {
-      await sut.load();
+      await sut.loadBySurvey();
 
       verify(cacheStorage.fetch('surveys')).called(1);
     });
 
     test('Should return a list of surveys on success', () async {
-      final surveys = await sut.load();
+      final surveys = await sut.loadBySurvey();
 
       expect(surveys, {
         SurveyEntity(
@@ -72,7 +72,7 @@ void main() {
     test('Should throw UnexpectedError if cache is empty', () async {
       mockFetch([]);
 
-      final future = sut.load();
+      final future = sut.loadBySurvey();
 
       expect(future, throwsA(DomainError.unexpected));
     });
@@ -80,7 +80,7 @@ void main() {
     test('Should throw UnexpectedError if cache is null', () async {
       mockFetch(null);
 
-      final future = sut.load();
+      final future = sut.loadBySurvey();
 
       expect(future, throwsA(DomainError.unexpected));
     });
@@ -95,7 +95,7 @@ void main() {
         }
       ]);
 
-      final future = sut.load();
+      final future = sut.loadBySurvey();
 
       expect(future, throwsA(DomainError.unexpected));
     });
@@ -108,7 +108,7 @@ void main() {
         }
       ]);
 
-      final future = sut.load();
+      final future = sut.loadBySurvey();
 
       expect(future, throwsA(DomainError.unexpected));
     });
@@ -116,7 +116,7 @@ void main() {
     test('Should throw UnexpectedError if cache throws', () async {
       mockFetchError();
 
-      final future = sut.load();
+      final future = sut.loadBySurvey();
 
       expect(future, throwsA(DomainError.unexpected));
     });
