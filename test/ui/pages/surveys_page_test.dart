@@ -1,12 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_clean_app/ui/helpers/errors/errors.dart';
-import 'package:flutter_clean_app/ui/pages/surveys/components/components.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 
+import 'package:flutter_clean_app/ui/helpers/errors/errors.dart';
 import 'package:flutter_clean_app/ui/pages/pages.dart';
 
 class SurveysPresenterSpy extends Mock implements SurveysPresenter {}
